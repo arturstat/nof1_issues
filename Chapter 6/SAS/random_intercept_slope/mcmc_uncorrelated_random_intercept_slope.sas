@@ -31,15 +31,15 @@ x cd "&ScriptDir";
 * Include data ;
 %include '..\data_normal.sas';
 
-/* SAS program G.3 */
+/* SAS program G.5 */
 
-title "Correlated random intercept and slope";
+title "Uncorrelated random intercept and slope";
 title2 "Bayesian inference";
 
 * define dataset names here ;
 %let datain=WORK.gaba_placebo; * input dataset ;
 %let datatemp=WORK.gaba_placebo_temp; * dummy dataset ;
-%let dataout=WORK.outDataCRIS; * output dataset ;
+%let dataout=WORK.outDataURIS; * output dataset ;
 
 * define variable names here ;
 %let Subject=id; * subject variable ;
@@ -90,30 +90,29 @@ quit;
 * Convert treatment variable to numeric ;
 %dataTemp
 
-%macro mcmcArray;
+%macro mcmcParms;
 	%local t;
-	array R[&TreatmentNumber] bi
-	%do t = 2 %to &TreatmentNumber %by 1;
-		ite_&&Treatment&t
-	%end;
-	;
-	array B[&TreatmentNumber] intercept
+	parms intercept
 	%do t = 2 %to &TreatmentNumber %by 1;
 		pte_&&Treatment&t
 	%end;
 	;
-	array G[&TreatmentNumber,&TreatmentNumber];
-	array M[&TreatmentNumber];
-	array S[&TreatmentNumber,&TreatmentNumber];
-	array U[&TreatmentNumber,&TreatmentNumber];
-%mend mcmcArray;
+	parms var_&Subject
+	%do t = 2 %to &TreatmentNumber %by 1;
+		var_&&Treatment&t
+	%end;
+	var_residual;
+%mend mcmcParms;
 
-%macro mcmcMonitor;
+%macro mcmcRandom;
 	%local t;
 	%do t = 2 %to &TreatmentNumber %by 1;
-		ite_&&Treatment&t
+		random ite_&&Treatment&t ~ normal(
+			mean=pte_&&Treatment&t,
+			var=var_&&Treatment&t
+		) subject=&Subject monitor=(ite_&&Treatment&t);
 	%end;
-%mend mcmcMonitor;
+%mend mcmcRandom;
 
 %macro mcmcMU;
 	%local t;
@@ -129,31 +128,21 @@ proc mcmc
 		data=&datatemp
 		outpost=&dataout
 		missing=COMPLETECASE /* discard missing observations */
-		nbi=20000 /* number of burn-in iterations */
+		nbi=5000 /* number of burn-in iterations */
 		nmc=100000 /* number of mcmc iterations */
-		ntu=10000 /* number of turning iterations */
+		ntu=2000 /* number of turning iterations */
 		seed=&seed /* random seed for simulation */
 		thin=1; /* thinning rate */
-	%mcmcArray
-	
-	begincnst;
-		call zeromatrix(M);
-		call identity(S);
-		call mult(S, 1e7, S);
-		call identity(U);
-		call mult(U, 0.01, U);
-	endcnst;
-	
-	parms B;
-	parms G var_residual;
+	%mcmcParms
 	
 	beginnodata;
-		prior B ~ mvn(M, S);
-		prior G ~ iwish(&TreatmentNumber, U);
-		prior var_residual ~ igamma(0.01, scale=0.01);
+		prior intercept pte_: ~ normal(mean=0, var=1e7);
+		prior var_: ~ igamma(shape=0.01, scale=0.01);
 	endnodata;
 	
-	random R ~ mvn(B, G) subject=&Subject monitor=(%mcmcMonitor);
+	random bi ~ normal(mean=intercept, var=var_&Subject)
+		subject=&Subject;
+	%mcmcRandom
 	
 	%mcmcMU
 	model &Outcome ~ normal(mu, var=var_residual);
@@ -179,8 +168,8 @@ quit;
 
 * Delete macros from WORK.Sasmacr ;
 proc catalog cat=WORK.Sasmacr;
-	delete findRef dataTemp mcmcArray
-		mcmcMonitor mcmcMU deleteVariables / et=macro;
+	delete findRef dataTemp mcmcParms
+		mcmcRandom mcmcMU deleteVariables / et=macro;
 quit;
 
 title; * clear all titles ;
