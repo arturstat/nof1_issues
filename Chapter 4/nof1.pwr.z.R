@@ -1,4 +1,4 @@
-# R program B.2
+# R program B.1
 #
 # Written by Artur Araujo
 #
@@ -7,7 +7,7 @@
 #
 # July 2018
 
-nof1.pwr.t <- function(
+nof1.pwr.z <- function(
   ncycle, # number of cycles
   nsubject, # number of subjects
   psi, # interactive sd
@@ -29,25 +29,19 @@ nof1.pwr.t <- function(
   if ( missing(ncycle) ) {
     if (nsubject <= 1)
       stop("argument 'nsubject' must be greater than 1!");
-    s1 <- psi^2/delta^2*( qnorm(p=1-alpha)+qnorm(p=power) )^2; s1 <- ceiling(s1);
-    repeat {
-      s2 <- psi^2/delta^2*( qt(p=1-alpha,df=s1-1)+qt(p=power,df=s1-1) )^2;
-      s2 <- ceiling(s2); if (abs(s2-s1) <= 1) break; s1 <- s2;
-    }
-    if (nsubject < s2)
-      stop("argument 'nsubject' must be greater or equal to ", s2, "!");
-    t <- ( qt(p=1-alpha, df=nsubject-1)+qt(p=power, df=nsubject-1) )^2;
-    n <- sigma^2*t/(nsubject*delta^2-psi^2*t); n <- ceiling(n);
+    z <- ( qnorm(p=1-alpha)+qnorm(p=power) )^2;
+    s <- ceiling(psi^2/delta^2*z);
+    if (nsubject < s)
+      stop("argument 'nsubject' must be greater or equal to ", s, "!");
+    n <- sigma^2*z/(nsubject*delta^2-psi^2*z);
+    n <- ceiling(n);
     return(n);
   } else if ( missing(nsubject) ) {
     if (ncycle < 0)
       stop("argument 'ncycle' must be non-negative!");
     s0 <- 1/delta^2*(psi^2+sigma^2/ncycle);
-    s1 <- s0*( qnorm(p=1-alpha)+qnorm(p=power) )^2; s1 <- ceiling(s1);
-    repeat {
-      s2 <- s0*( qt(p=1-alpha,df=s1-1)+qt(p=power,df=s1-1) )^2;
-      s2 <- ceiling(s2); if (abs(s2-s1) <= 1) break; s1 <- s2;
-    }
-    return(s2);
+    s1 <- s0*( qnorm(p=1-alpha)+qnorm(p=power) )^2;
+    s1 <- ceiling(s1);
+    return(s1);
   }
-} # nof1.pwr.t
+} # nof1.pwr.z
