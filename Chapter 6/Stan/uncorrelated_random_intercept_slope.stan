@@ -1,12 +1,16 @@
 /*
-Stan program I.5
-
 Written by Artur Araujo
 November 2019
 
 artur.stat@gmail.com
-aamarinhodearaujo1@sheffield.ac.uk
+
+while working
+on the IDEAL project
+
+http://www.ideal.rwth-aachen.de/
 */
+
+/* Stan program I.5 */
 
 data {
   int<lower=1> nd; // number of data elements

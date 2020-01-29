@@ -1,6 +1,4 @@
 /*
-Stan program I.7
-
 Written by Artur Araujo
 June 2019
 
@@ -8,8 +6,14 @@ Modified by Artur Araujo
 November 2019
 
 artur.stat@gmail.com
-aamarinhodearaujo1@sheffield.ac.uk
+
+while working
+on the IDEAL project
+
+http://www.ideal.rwth-aachen.de/
 */
+
+/* Stan program I.7 */
 
 data {
   int<lower=1> nd; // number of data elements
