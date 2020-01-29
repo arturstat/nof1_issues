@@ -1,9 +1,12 @@
 # Written by Artur Araujo
+# November 2019
 
 # artur.stat@gmail.com
-# aamarinhodearaujo1@sheffield.ac.uk
 
-# November 2019
+# while working
+# on the IDEAL project
+
+# http://www.ideal.rwth-aachen.de/
 
 # define working directory
 while ( !"fixed_effects.R" %in% list.files() ) {

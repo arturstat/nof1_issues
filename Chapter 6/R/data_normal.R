@@ -1,9 +1,12 @@
 # Written by Artur Araujo
+# October-November 2019
 
 # artur.stat@gmail.com
-# aamarinhodearaujo1@sheffield.ac.uk
 
-# October-November 2019
+# while working
+# on the IDEAL project
+
+# http://www.ideal.rwth-aachen.de/
 
 # These data were kindly supplied by Dr. Michael Yelland.
 # Yelland MJ, Poulos CJ, Pillans PI, et al.
