@@ -1,13 +1,16 @@
-# R program C.19
+# IDEAL project
+# http://www.ideal.rwth-aachen.de/
 #
 # Author:
 # Artur Araujo <artur.stat@gmail.com>
 #
 # Description:
-#  Create figure 3.
+#  Creates figure 3.
 #
 # Remarks:
 #  Needs several hours to complete.
+
+# R program C.19
 
 files <- c(
   "boot.statistic.R", "bootR.R",
