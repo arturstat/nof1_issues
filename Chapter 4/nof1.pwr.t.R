@@ -1,11 +1,14 @@
-# R program B.2
-#
 # Written by Artur Araujo
-#
-# artur.stat@gmail.com
-# aamarinhodearaujo1@sheffield.ac.uk
-#
 # July 2018
+
+# artur.stat@gmail.com
+
+# while working
+# on the IDEAL project
+
+# http://www.ideal.rwth-aachen.de/
+
+# R program B.2
 
 nof1.pwr.t <- function(
   ncycle, # number of cycles
