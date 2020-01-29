@@ -7,7 +7,6 @@ April 2018
 November 2019
 
 artur.stat@gmail.com
-aamarinhodearaujo1@sheffield.ac.uk
 
 while working for the
 Luxembourg Institute of Health
