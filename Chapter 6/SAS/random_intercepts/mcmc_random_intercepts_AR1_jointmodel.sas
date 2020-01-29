@@ -1,5 +1,14 @@
-* Written by Artur Araujo ;
-* November 2019 ;
+/*
+Written by Artur Araujo
+November 2019
+
+artur.stat@gmail.com
+
+while working
+on the IDEAL project
+
+http://www.ideal.rwth-aachen.de/
+*/
 
 * Options for macro debugging ;
 *options symbolgen mprint mlogic;
