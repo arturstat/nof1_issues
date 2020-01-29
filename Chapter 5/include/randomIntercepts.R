@@ -1,4 +1,5 @@
-# R program C.14
+# IDEAL project
+# http://www.ideal.rwth-aachen.de/
 #
 # Author:
 # Artur Araujo <artur.stat@gmail.com>
@@ -22,6 +23,8 @@
 #
 # Remarks:
 #  None.
+
+# R program C.14
 
 randomIntercepts <- function(
   size, # Vector of number of measurements for each subject.

@@ -1,4 +1,5 @@
-# R program C.2
+# IDEAL project
+# http://www.ideal.rwth-aachen.de/
 #
 # Author:
 # Artur Araujo <artur.stat@gmail.com>
@@ -37,6 +38,8 @@
 #
 # Remarks:
 #  None.
+
+# R program C.2
 
 bootR <- function(
   func, # function which simulates the data

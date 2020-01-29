@@ -1,14 +1,17 @@
-# R program C.7
+# IDEAL project
+# http://www.ideal.rwth-aachen.de/
 #
 # Author:
 # Artur Araujo <artur.stat@gmail.com>
 #
 # Description:
-#  Estimate individual treatment effects
+#  Estimates individual treatment effects
 # from a random intercepts model.
 #
 # Remarks:
 #  None.
+
+# R program C.7
 
 estimateITE.lme.randomIntercepts <- function(
   object

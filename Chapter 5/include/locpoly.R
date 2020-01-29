@@ -1,13 +1,16 @@
-# R program C.11
+# IDEAL project
+# http://www.ideal.rwth-aachen.de/
 #
 # Author:
 # Artur Araujo <artur.stat@gmail.com>
 #
 # Description:
-#  Estimate local polynomial regression.
+#  Estimates a local polynomial regression.
 #
 # Remarks:
 #  None.
+
+# R program C.11
 
 invisible(
   setGeneric(

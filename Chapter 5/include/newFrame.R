@@ -1,4 +1,5 @@
-# R program C.13
+# IDEAL project
+# http://www.ideal.rwth-aachen.de/
 #
 # Author:
 # Artur Araujo <artur.stat@gmail.com>
@@ -17,6 +18,8 @@
 #
 # Remarks:
 #  For internal use.
+
+# R program C.13
 
 newFrame <- function(
   modes,

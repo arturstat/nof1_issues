@@ -1,13 +1,16 @@
-# R program C.4
+# IDEAL project
+# http://www.ideal.rwth-aachen.de/
 #
 # Author:
 # Artur Araujo <artur.stat@gmail.com>
 #
 # Description:
-#  Check arguments to randomIntercepts function.
+#  Checks arguments to randomIntercepts function.
 #
 # Remarks:
 #  None.
+
+# R program C.4
 
 checkArgs.randomIntercepts <- function(
   size,

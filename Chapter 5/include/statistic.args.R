@@ -1,3 +1,15 @@
+# IDEAL project
+# http://www.ideal.rwth-aachen.de/
+#
+# Author:
+# Artur Araujo <artur.stat@gmail.com>
+#
+# Description:
+#  Computes a statistic.
+#
+# Remarks:
+#  None.
+
 # R program C.17
 
 statistic.args <- function(

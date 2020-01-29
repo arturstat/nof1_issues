@@ -1,13 +1,16 @@
-# R program C.8
+# IDEAL project
+# http://www.ideal.rwth-aachen.de/
 #
 # Author:
 # Artur Araujo <artur.stat@gmail.com>
 #
 # Description:
-#  Define 'lmeModel' class.
+#  Defines 'lmeModel' class.
 #
 # Remarks:
 #  None.
+
+# R program C.8
 
 # lmList class
 setOldClass(

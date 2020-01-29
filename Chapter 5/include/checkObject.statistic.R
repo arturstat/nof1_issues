@@ -1,15 +1,18 @@
-# R program C.5
+# IDEAL project
+# http://www.ideal.rwth-aachen.de/
 #
 # Author:
 # Artur Araujo <artur.stat@gmail.com>
 #
 # Description:
-#  Check if 'stat' function returns
+#  Checks if 'stat' function returns
 # an object with the required structure.
 #
 # Remarks:
 #  This function is required by
 # 'checkArgs.boot' function.
+
+# R program C.5
 
 checkObject.statistic <- function(
   func,
