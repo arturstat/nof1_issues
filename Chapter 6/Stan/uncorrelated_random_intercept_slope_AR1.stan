@@ -57,13 +57,13 @@ model {
   int irow; // row index
   int icol; // column index
   int j; // while loop counter
-  mu ~ normal(0, 1e4); // hyperprior
-  pte ~ normal(0, 1e4); // hyperprior
-  phi ~ inv_gamma(0.01, 0.01); // hyperprior
-  psi ~ inv_gamma(0.01, 0.01); // hyperprior
+  mu ~ normal(0, 1e6); // hyperprior
+  pte ~ normal(0, 1e6); // hyperprior
+  phi ~ inv_gamma(0.01, 10); // hyperprior
+  psi ~ inv_gamma(0.01, 10); // hyperprior
   ALPHA ~ normal( mu, sqrt(phi) ); // prior
   for ( t in 1:(nt-1) ) ITE[t] ~ normal(pte[t], sqrt( psi[t]) ); // prior
-  sigma ~ inv_gamma(0.01, 0.01); // prior
+  sigma ~ inv_gamma(0.01, 10); // prior
   rho ~ uniform(-1, 1); // prior
   for (s in 1:ns) { // loop through the subjects
     for (i in first[s]:last[s]) { // loop through the rows

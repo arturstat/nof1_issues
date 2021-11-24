@@ -33,13 +33,13 @@ parameters {
 
 model {
   real average;
-  mu ~ normal(0, 1e4); // hyperprior
-  pte ~ normal(0, 1e4); // hyperprior
-  phi ~ inv_gamma(0.01, 0.01); // hyperprior
-  psi ~ inv_gamma(0.01, 0.01); // hyperprior
+  mu ~ normal(0, 1e6); // hyperprior
+  pte ~ normal(0, 1e6); // hyperprior
+  phi ~ inv_gamma(0.01, 10); // hyperprior
+  psi ~ inv_gamma(0.01, 10); // hyperprior
   ALPHA ~ normal( mu, sqrt(phi) ); // prior
   for ( t in 1:(nt-1) ) ITE[t] ~ normal(pte[t], sqrt( psi[t]) ); // prior
-  sigma ~ inv_gamma(0.01, 0.01); // prior
+  sigma ~ inv_gamma(0.01, 10); // prior
   for (i in 1:nd) { // loop through the observations
     average = ALPHA[subj[i]]; // add random intercept
     for (t in 2:nt) average += ITE[t-1][subj[i]]*(treat[i]==t); // add treatment effects

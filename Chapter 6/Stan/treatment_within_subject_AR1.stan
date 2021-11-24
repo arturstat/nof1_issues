@@ -71,11 +71,11 @@ model {
   int irow; // row index
   int icol; // column index
   int j; // while loop counter
-  mu ~ normal(0, 1e4); // prior
-  pte ~ normal(0, 1e4); // prior
-  phi ~ inv_gamma(0.01, 0.01); // hyperprior
-  psi ~ inv_gamma(0.01, 0.01); // hyperprior
-  sigma ~ inv_gamma(0.01, 0.01); // prior
+  mu ~ normal(0, 1e6); // prior
+  pte ~ normal(0, 1e6); // prior
+  phi ~ inv_gamma(0.01, 10); // hyperprior
+  psi ~ inv_gamma(0.01, 10); // hyperprior
+  sigma ~ inv_gamma(0.01, 10); // prior
   rho ~ uniform(-1, 1); // prior
   ALPHA ~ normal( 0, sqrt(phi) ); // subject random effects
   THETA ~ normal( 0, sqrt(psi) ); // subject*treatment random effects

@@ -131,16 +131,17 @@ proc mcmc
 		data=&datatemp
 		outpost=&dataout
 		missing=COMPLETECASE /* discard missing observations */
-		nbi=5000 /* number of burn-in iterations */
+		nbi=1000 /* number of burn-in iterations */
 		nmc=100000 /* number of mcmc iterations */
-		ntu=2000 /* number of turning iterations */
+		nthreads=-1 /* number of parallel threads */
+		ntu=1000 /* number of tuning iterations */
 		seed=&seed /* random seed for simulation */
 		thin=1; /* thinning rate */
 	%mcmcParms
 	
 	beginnodata;
-		prior intercept pte_: ~ normal(mean=0, var=1e7);
-		prior var_: ~ igamma(shape=0.01, scale=0.01);
+		prior intercept pte_: ~ normal(mean=0, var=1e6);
+		prior var_: ~ igamma(shape=0.01, scale=10);
 	endnodata;
 	
 	random bi ~ normal(mean=intercept, var=var_&Subject)

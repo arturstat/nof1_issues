@@ -132,9 +132,10 @@ proc mcmc
 		data=&datatemp
 		outpost=&dataout
 		missing=COMPLETECASE /* discard missing observations */
-		nbi=20000 /* number of burn-in iterations */
+		nbi=1000 /* number of burn-in iterations */
+		nthreads=-1 /* number of parallel threads */
 		nmc=100000 /* number of mcmc iterations */
-		ntu=10000 /* number of turning iterations */
+		ntu=1000 /* number of tuning iterations */
 		seed=&seed /* random seed for simulation */
 		thin=1; /* thinning rate */
 	%mcmcArray
@@ -142,9 +143,9 @@ proc mcmc
 	begincnst;
 		call zeromatrix(M);
 		call identity(S);
-		call mult(S, 1e7, S);
+		call mult(S, 1e6, S);
 		call identity(U);
-		call mult(U, 0.01, U);
+		call mult(U, 10, U);
 	endcnst;
 	
 	parms B;
@@ -153,7 +154,7 @@ proc mcmc
 	beginnodata;
 		prior B ~ mvn(M, S);
 		prior G ~ iwish(&TreatmentNumber, U);
-		prior var_residual ~ igamma(0.01, scale=0.01);
+		prior var_residual ~ igamma(0.01, scale=10);
 	endnodata;
 	
 	random R ~ mvn(B, G) subject=&Subject monitor=(%mcmcMonitor);

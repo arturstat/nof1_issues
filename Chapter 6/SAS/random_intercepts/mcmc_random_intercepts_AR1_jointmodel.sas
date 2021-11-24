@@ -97,13 +97,12 @@ run;
 
 %macro mcmcParms;
 	%local s;
-	parms pte var_&Subject;
-	parms var_residual rho /slice;
-	parms
+	parms pte var_&Subject; * separate Conjugate sampling ;
+	parms var_residual / slice;
+	parms rho /slice;
 	%do s = 1 %to &SubjectNumber %by 1;
-		ite_&&Subject&s
+		parms ite_&&Subject&s; * separate N-Metropolis sampling ;
 	%end;
-	;
 %mend mcmcParms;
 
 %macro mcmcLogLike;
@@ -116,11 +115,8 @@ run;
 			MU_&&Subject&s..[i] = ite_&&Subject&s;
 			COV_&&Subject&s..[i,i] = 2*var_residual*(1-rho);
 			do j = i+1 to &&size&s by 1;
-				COV_&&Subject&s..[i,j] = -P[index]*P[index+j-i]*var_residual*(
-					rho**(2*abs(i-j)+1)
-					- 2*rho**( 2*abs(i-j) )
-					+ rho**(2*abs(i-j)-1)
-				);
+				COV_&&Subject&s..[i,j] = -P[index]*P[index+j-i]*var_residual*
+					rho**(2*abs(i-j)-1)*(1-rho)**2;
 				COV_&&Subject&s..[j,i] = COV_&&Subject&s..[i,j];
 			end;
 			index = index + 1;
@@ -134,9 +130,10 @@ run;
 proc mcmc
 		data=&datadummy
 		outpost=&dataout
-		nbi=10000 /* number of burn-in iterations */
-		nmc=10000 /* number of mcmc iterations */
-		ntu=1000 /* number of turning iterations */
+		nbi=1000 /* number of burn-in iterations */
+		nmc=100000 /* number of mcmc iterations */
+		nthreads=-1 /* number of parallel threads */
+		ntu=2000 /* number of tuning iterations */
 		seed=&seed /* random seed for simulation */
 		thin=1 /* thinning rate */
 		jointmodel; /* specify joint log-likelihood */
@@ -145,10 +142,10 @@ proc mcmc
 	%mcmcParms
 	
 	beginnodata;
-		hyperprior pte ~ normal(mean=0, var=1e7);
-		hyperprior var_&Subject ~ igamma(shape=0.01, scale=0.01);
+		hyperprior pte ~ normal(mean=0, var=1e6);
+		hyperprior var_&Subject ~ igamma(shape=0.01, scale=10);
 		prior ite_: ~ normal(mean=pte, var=var_&Subject);
-		prior var_residual ~ igamma(shape=0.01, scale=0.01);
+		prior var_residual ~ igamma(shape=0.01, scale=10);
 		prior rho ~ uniform(left=-1, right=1);
 	endnodata;
 	

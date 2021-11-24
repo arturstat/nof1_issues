@@ -55,10 +55,10 @@ model {
   matrix[nmax,nmax] COV; // individual covariance matrix
   int irow; int icol; // row and column indexes
   int j; int k;
-  pte ~ normal(0, 1e4); // hyperprior
-  psi ~ inv_gamma(0.01, 0.01); // hyperprior
+  pte ~ normal(0, 1e6); // hyperprior
+  psi ~ inv_gamma(0.01, 10); // hyperprior
   ITE ~ normal( pte, sqrt(psi) ); // subject random effects
-  sigma ~ inv_gamma(0.01, 0.01); // prior
+  sigma ~ inv_gamma(0.01, 10); // prior
   rho ~ uniform(-1, 1); // prior
   for (s in 1:ns) { // loop through the subjects
     for (i in first[s]:last[s]) { // loop through the rows
@@ -72,7 +72,7 @@ model {
         k = 2*abs(cycle[index[j]]-cycle[index[i]]);
         // upper diagonal element
         COV[irow,icol] = -delta[index[j]]*delta[index[i]]*sigma*
-          ( pow(rho, k+1)-2*pow(rho, k)+pow(rho, k-1) );
+          pow(rho, k-1)*pow(1-rho, 2);
         COV[icol,irow] = COV[irow,icol]; // lower diagonal element
         j += 1;
       }

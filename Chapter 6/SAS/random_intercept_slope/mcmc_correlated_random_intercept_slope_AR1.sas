@@ -170,7 +170,7 @@ run;
 			R_&&Subject&s
 		%end;
 		~ mvn(B, G);
-		prior var_residual ~ igamma(0.01, scale=0.01);
+		prior var_residual ~ igamma(0.01, scale=10);
 		prior rho ~ uniform(left=-1, right=1);
 	endnodata;
 %mend mcmcPrior;
@@ -204,8 +204,9 @@ proc mcmc
 		data=&datadummy
 		outpost=&dataout
 		nbi=1000 /* number of burn-in iterations */
-		nmc=10000 /* number of mcmc iterations */
-		ntu=1000 /* number of turning iterations */
+		nmc=100000 /* number of mcmc iterations */
+		nthreads=-1 /* number of parallel threads */
+		ntu=1000 /* number of tuning iterations */
 		seed=&seed /* random seed for simulation */
 		thin=1 /* thinning rate */
 		jointmodel; /* specify joint log-likelihood */
@@ -214,9 +215,9 @@ proc mcmc
 	begincnst;
 		call zeromatrix(M);
 		call identity(S);
-		call mult(S, 1e7, S);
+		call mult(S, 1e6, S);
 		call identity(U);
-		call mult(U, 0.01, U);
+		call mult(U, 10, U);
 	endcnst;
 	
 	%mcmcParms

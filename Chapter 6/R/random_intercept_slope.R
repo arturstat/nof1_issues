@@ -298,16 +298,12 @@ fit_random_slope <- stan(
   model_name="fit_random_slope",
   data=data_random_slope,
   chains=parallel::detectCores(),
-  iter=12000,
-  warmup=2000,
+  iter=3000,
+  warmup=1000,
   thin=1,
   init="random",
   seed=iseed,
   algorithm="NUTS",
-  control=list(
-    adapt_delta=0.99,
-    max_treedepth=12
-  ),
   save_dso=FALSE,
   verbose=TRUE,
   cores=parallel::detectCores()
@@ -356,8 +352,8 @@ fit_random_slope_ar1 <- stan(
   model_name="fit_random_slope_ar1",
   data=data_random_slope_ar1,
   chains=parallel::detectCores(),
-  iter=12000,
-  warmup=2000,
+  iter=3000,
+  warmup=1000,
   thin=1,
   init="random",
   seed=iseed,
@@ -397,16 +393,12 @@ fit_random_slope_un <- stan(
   model_name="fit_random_slope_un",
   data=data_random_slope,
   chains=parallel::detectCores(),
-  iter=12000,
-  warmup=2000,
+  iter=3000,
+  warmup=1000,
   thin=1,
   init="random",
   seed=iseed,
   algorithm="NUTS",
-  control=list(
-    adapt_delta=0.99,
-    max_treedepth=12
-  ),
   save_dso=FALSE,
   verbose=TRUE,
   cores=parallel::detectCores()
@@ -438,16 +430,12 @@ fit_random_slope_un_ar1 <- stan(
   model_name="fit_random_slope_un_ar1",
   data=data_random_slope_ar1,
   chains=parallel::detectCores(),
-  iter=12000,
-  warmup=2000,
+  iter=3000,
+  warmup=1000,
   thin=1,
   init="random",
   seed=iseed,
   algorithm="NUTS",
-  control=list(
-    adapt_delta=0.99,
-    max_treedepth=12
-  ),
   save_dso=FALSE,
   verbose=TRUE,
   cores=parallel::detectCores()

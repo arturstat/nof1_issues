@@ -28,8 +28,8 @@ data {
 
 transformed data {
   vector[nt] THETA = rep_vector(0, nt); // MU prior mean
-  matrix[nt,nt] ETA = diag_matrix( rep_vector(1e7, nt) ); // MU prior covariance
-  matrix[nt,nt] DELTA = diag_matrix( rep_vector(0.01, nt) ); // PSI prior matrix
+  matrix[nt,nt] ETA = diag_matrix( rep_vector(1e6, nt) ); // MU prior covariance
+  matrix[nt,nt] DELTA = diag_matrix( rep_vector(10, nt) ); // PSI prior matrix
   int index[nd] = sort_indices_asc(subj); // sorted subject index
   int first[ns]; // index of first observation
   int last[ns]; // index of last observation
@@ -78,7 +78,7 @@ model {
   MU ~ multi_normal(THETA, ETA); // hyperprior
   PSI ~ inv_wishart(nt, DELTA); // hyperprior
   ALPHA ~ multi_normal(MU, PSI); // prior
-  sigma ~ inv_gamma(0.01, 0.01); // prior
+  sigma ~ inv_gamma(0.01, 10); // prior
   rho ~ uniform(-1, 1); // prior
   for (s in 1:ns) { // loop through the subjects
     for (i in first[s]:last[s]) { // loop through the rows

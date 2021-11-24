@@ -82,9 +82,10 @@ run;
 proc mcmc
 		data=&datatemp
 		outpost=&dataout
-		nbi=30000 /* number of burn-in iterations */
-		nmc=120000 /* number of mcmc iterations */
-		ntu=1000 /* number of turning iterations */
+		nbi=1000 /* number of burn-in iterations */
+		nmc=100000 /* number of mcmc iterations */
+		nthreads=-1 /* number of parallel threads */
+		ntu=2000 /* number of tuning iterations */
 		seed=&seed /* random seed for simulation */
 		thin=1; /* thinning rate */
 	array Y[&CycleNumber] Y1-Y%eval(&CycleNumber);
@@ -92,13 +93,13 @@ proc mcmc
 	array Cov[&CycleNumber,&CycleNumber];
 	array P[&CycleNumber] P1-P%eval(&CycleNumber);
 	
-	parms pte var_&Subject;
-	parms var_residual rho / slice;
+	parms pte var_&Subject; * separate Conjugate sampling ;
+	parms var_residual / slice; * separate Slice sampling ;
+	parms rho / slice; * separate Slice sampling ;
 	
 	beginnodata;
-		prior pte ~ normal(0, var=1e7);
-		prior var_&Subject ~ igamma(shape=0.01, scale=0.01);
-		prior var_residual ~ igamma(shape=0.01, scale=0.01);
+		prior pte ~ normal(0, var=1e6);
+		prior var_: ~ igamma(shape=0.01, scale=10);
 		prior rho ~ uniform(left=-1, right=1);
 	endnodata;
 	
@@ -109,11 +110,8 @@ proc mcmc
 		Mu[i] = ite;
 		Cov[i,i] = 2*var_residual*(1-rho);
 		do j = i+1 to &CycleNumber;
-			Cov[i,j] = -P[i]*P[j]*var_residual*(
-				rho**(2*abs(i-j)+1)
-				- 2*rho**( 2*abs(i-j) )
-				+ rho**(2*abs(i-j)-1)
-			);
+			Cov[i,j] = -P[i]*P[j]*var_residual*
+				rho**(2*abs(i-j)-1)*(1-rho)**2;
 			Cov[j,i] = Cov[i,j];
 		end;
 	end;

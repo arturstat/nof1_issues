@@ -140,28 +140,27 @@ run;
 	%do t = 2 %to &TreatmentNumber %by 1;
 		pte_&&Treatment&t
 	%end;
-	;
+	; * separate Conjugate sampling ;
 	parms var_&Subject
 	%do t = 2 %to &TreatmentNumber %by 1;
 		var_&&Treatment&t
 	%end;
-	;
-	parms var_residual rho;
-	parms
+	; * separate Conjugate sampling ;
+	parms var_residual rho / slice; * simultaneous Slice sampling ;
 	%do s = 1 %to &SubjectNumber %by 1;
-		bi_&&Subject&s
+		parms bi_&&Subject&s
 		%do t = 2 %to &TreatmentNumber %by 1;
 			ite_&&Subject&s.._&&Treatment&t
 		%end;
+		; * simultaneous within subject N-Metropolis sampling ;
 	%end;
-	;
 %mend mcmcParms;
 
 %macro mcmcPrior;
 	%local s t;
 	beginnodata;
-		prior intercept pte_: ~ normal(mean=0, var=1e7);
-		prior var_: ~ igamma(0.01, scale=0.01);
+		prior intercept pte_: ~ normal(mean=0, var=1e6);
+		prior var_: ~ igamma(0.01, scale=10);
 		prior bi_: ~ normal(mean=intercept, var=var_&Subject);
 		%do t = 2 %to &TreatmentNumber %by 1;
 			prior
@@ -202,9 +201,10 @@ run;
 proc mcmc
 		data=&datadummy
 		outpost=&dataout
-		nbi=2000 /* number of burn-in iterations */
+		nbi=1000 /* number of burn-in iterations */
 		nmc=100000 /* number of mcmc iterations */
-		ntu=2000 /* number of turning iterations */
+		nthreads=-1 /* number of parallel threads */
+		ntu=1000 /* number of tuning iterations */
 		seed=&seed /* random seed for simulation */
 		thin=1 /* thinning rate */
 		jointmodel; /* specify joint log-likelihood */

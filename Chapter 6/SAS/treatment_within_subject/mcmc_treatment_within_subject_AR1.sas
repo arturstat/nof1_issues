@@ -142,21 +142,19 @@ run;
 
 %macro mcmcParms;
 	%local s t;
-	parms intercept
+	parms intercept / slice; * separate Slice sampling ;
 	%do t = 2 %to &TreatmentNumber %by 1;
-		pte_&&Treatment&t
+		parms pte_&&Treatment&t / slice; * separate Slice sampling ;
 	%end;
-	;
-	parms var_&Subject var_&Subject._&Treatment
-			var_residual rho;
-	parms
+	parms var_&Subject var_&Subject._&Treatment; * separate Conjugate sampling ;
+	parms var_residual rho / slice; * simultaneous Slice sampling ;
 	%do s = 1 %to &SubjectNumber %by 1;
-		bi_&&Subject&s
+		parms bi_&&Subject&s
 		%do t=1 %to &TreatmentNumber %by 1;
 			di_&&Subject&s.._&&Treatment&t
 		%end;
+		; * simultaneous within subject N-Metropolis sampling ;
 	%end;
-	;
 %mend mcmcParms;
 
 %macro mcmcITE;
@@ -202,8 +200,9 @@ proc mcmc
 		data=&datadummy
 		outpost=&dataout
 		nbi=1000 /* number of burn-in iterations */
-		nmc=10000 /* number of mcmc iterations */
-		ntu=1000 /* number of turning iterations */
+		nmc=100000 /* number of mcmc iterations */
+		nthreads=-1 /* number of parallel threads */
+		ntu=1000 /* number of tuning iterations */
 		seed=&seed /* random seed for simulation */
 		thin=1 /* thinning rate */
 		monitor=(_PARMS_ ITE) /* output analysis for selected symbols */
@@ -213,13 +212,13 @@ proc mcmc
 	%mcmcParms
 	
 	beginnodata;
-		hyperprior var_&Subject ~ igamma(shape=0.01, scale=0.01);
-		hyperprior var_&Subject._&Treatment ~ igamma(shape=0.01, scale=0.01);
+		hyperprior var_&Subject ~ igamma(shape=0.01, scale=10);
+		hyperprior var_&Subject._&Treatment ~ igamma(shape=0.01, scale=10);
 		
-		prior intercept pte_: ~ normal(0, var=1e7);
+		prior intercept pte_: ~ normal(0, var=1e6);
 		prior bi_: ~ normal(0, var=var_&Subject);
 		prior di_: ~ normal(0, var=var_&Subject._&Treatment);
-		prior var_residual ~ igamma(shape=0.01, scale=0.01);
+		prior var_residual ~ igamma(shape=0.01, scale=10);
 		prior rho ~ uniform(left=-1, right=1);
 	endnodata;
 	

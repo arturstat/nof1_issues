@@ -54,16 +54,16 @@ proc mcmc
 		outpost=&dataout
 		missing=COMPLETECASE /* discard missing observations */
 		nbi=1000 /* number of burn-in iterations */
-		nmc=100000 /* number of mcmc iterations */
-		ntu=1000 /* number of turning iterations */
+		nmc=30000 /* number of mcmc iterations */
+		nthreads=-1 /* number of parallel threads */
+		ntu=1000 /* number of tuning iterations */
 		seed=&seed /* random seed for simulation */
 		thin=1; /* thinning rate */
 	parms pte var_&Subject var_residual;
 	
 	beginnodata;
-		prior pte ~ normal(mean=0, var=1e7);
-		prior var_&Subject ~ igamma(shape=0.01, scale=0.01);
-		prior var_residual ~ igamma(shape=0.01, scale=0.01);
+		prior pte ~ normal(mean=0, var=1e6);
+		prior var_: ~ igamma(shape=0.01, scale=10);
 	endnodata;
 	
 	random ite ~ normal(mean=pte, var=var_&Subject)

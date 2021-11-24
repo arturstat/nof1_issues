@@ -30,10 +30,10 @@ parameters {
 }
 
 model {
-  pte ~ normal(0, 1e4); // hyperprior
-  psi ~ inv_gamma(0.01, 0.01); // hyperprior
+  pte ~ normal(0, 1e6); // hyperprior
+  psi ~ inv_gamma(0.01, 10); // hyperprior
   ITE ~ normal( pte, sqrt(psi) ); // subject random effects
-  sigma ~ inv_gamma(0.01, 0.01); // prior
+  sigma ~ inv_gamma(0.01, 10); // prior
   for (i in 1:nd) {
     outcome[i] ~ normal( ITE[subj[i]], sqrt(sigma) ); // likelihood
   }
