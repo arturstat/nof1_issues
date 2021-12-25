@@ -36,9 +36,9 @@ library(package=rstan);
 
 options( mc.cores=parallel::detectCores() );
 rstan_options(auto_write=TRUE);
-Sys.setenv(LOCAL_CXX14='g++ -std=c++1y');
-Sys.setenv(LOCAL_CXX14FLAGS='-O3');
-Sys.setenv(LOCAL_CXX11FLAGS='-O3');
+#Sys.setenv(LOCAL_CXX14='g++ -std=c++1y');
+#Sys.setenv(LOCAL_CXX14FLAGS='-O3');
+#Sys.setenv(LOCAL_CXX11FLAGS='-O3');
 
 iseed <- 3141593; # seed for RNG
 
@@ -68,13 +68,12 @@ fit_random_intercepts <- stan(
   model_name="fit_random_intercepts",
   data=data_random_intercepts,
   chains=parallel::detectCores(),
-  iter=25000,
-  warmup=5000,
+  iter=3000,
+  warmup=1000,
   thin=1,
   init="random",
   seed=iseed,
   algorithm="NUTS",
-  control=list(adapt_delta=0.999),
   save_dso=FALSE,
   verbose=TRUE,
   cores=parallel::detectCores()

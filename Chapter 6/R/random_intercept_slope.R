@@ -47,9 +47,9 @@ library(package=rstan);
 
 options( mc.cores=parallel::detectCores() );
 rstan_options(auto_write=TRUE);
-Sys.setenv(LOCAL_CXX14='g++ -std=c++1y');
-Sys.setenv(LOCAL_CXX14FLAGS='-O3');
-Sys.setenv(LOCAL_CXX11FLAGS='-O3');
+#Sys.setenv(LOCAL_CXX14='g++ -std=c++1y');
+#Sys.setenv(LOCAL_CXX14FLAGS='-O3');
+#Sys.setenv(LOCAL_CXX11FLAGS='-O3');
 
 iseed <- 3141593; # seed for RNG
 
