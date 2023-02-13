@@ -1,4 +1,4 @@
-# nof1_thesis
+# nof1_issues
 Statistical Issues in the Design and Analysis of Series of N-of-1 Trials
 
 ## Funding
