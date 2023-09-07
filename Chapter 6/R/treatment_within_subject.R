@@ -168,6 +168,18 @@ data_treat_subj <- with(
   }
 );
 
+# check indicator data
+unique(
+  data.frame(
+    "id"=gaba_placebo_miss$id,
+    "Treatment"=gaba_placebo_miss$Treatment,
+    "Cycle"=gaba_placebo_miss$Cycle,
+    "treat"=data_treat_subj$treat,
+    "subj_treat"=data_treat_subj$subj_treat,
+    "subj_cycle"=data_treat_subj$subj_cycle
+  )
+);
+
 fit_treat_subj <- stan(
   file="../Stan/treatment_within_subject.stan",
   model_name="fit_treat_subj",
